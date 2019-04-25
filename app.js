@@ -15,11 +15,13 @@ const express               = require("express"),
 // requiring routes
 const   commentRoutes       = require("./routes/comments"),
         campgroundRoutes    = require("./routes/campgrounds"),
-        indexRoutes         = require("./routes/index");
-
+        indexRoutes         = require("./routes/index");    
+    //for local DB 
 // mongoose.connect('mongodb://localhost:27017/yelp_camp_v13', {useCreateIndex: true, useNewUrlParser: true });
-mongoose.connect('mongodb+srv://user:mypassword123@cluster0-0c374.mongodb.net/test?retryWrites=true', {useCreateIndex: true, useNewUrlParser: true });
-mongoose.set('useFindAndModify', false);
+    // Deployed to heroku with MongoDb Atlas
+// mongoose.connect('mongodb+srv://user:mypassword123@cluster0-0c374.mongodb.net/test?retryWrites=true', {useCreateIndex: true, useNewUrlParser: true });
+mongoose.connect(process.env.DATABASEURL, {useCreateIndex: true, useNewUrlParser: true, useFindAndModify: false });
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
