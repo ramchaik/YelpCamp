@@ -16,11 +16,14 @@ const express               = require("express"),
 const   commentRoutes       = require("./routes/comments"),
         campgroundRoutes    = require("./routes/campgrounds"),
         indexRoutes         = require("./routes/index");    
-    //for local DB 
-// mongoose.connect('mongodb://localhost:27017/yelp_camp_v13', {useCreateIndex: true, useNewUrlParser: true });
-    // Deployed to heroku with MongoDb Atlas
-// mongoose.connect('mongodb+srv://user:mypassword123@cluster0-0c374.mongodb.net/test?retryWrites=true', {useCreateIndex: true, useNewUrlParser: true });
-mongoose.connect(process.env.DATABASEURL, {useCreateIndex: true, useNewUrlParser: true, useFindAndModify: false });
+    
+// mongoose.connect('mongodb://localhost:27017/yelp_camp_v13', {useCreateIndex: true, useNewUrlParser: true, useFindAndModify: false });
+// mongoose.connect('mongodb+srv://user:mypassword123@cluster0-0c374.mongodb.net/test?retryWrites=true', {useCreateIndex: true, useNewUrlParser: true, useFindAndModify: false });
+
+// backup
+const url = process.env.DATABASEURL || "mongodb://localhost:27017/yelp_camp_v13";
+// DATABASEURL Environment variable
+mongoose.connect( url, {useCreateIndex: true, useNewUrlParser: true, useFindAndModify: false });
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
