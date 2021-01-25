@@ -1,10 +1,18 @@
 import express, { Express } from "express";
+import dotenv from "dotenv";
+import path from "path";
+
+dotenv.config();
+
 const app: Express = express();
 
-const PORT = process.env.PORT || 3000;
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+const PORT = process.env.SERVER_PORT || 3000;
 
 app.get("/", (req, res) => {
-  res.send({ msg: "Hello" });
+  res.render("home");
 });
 
 app.listen(PORT, () => {
