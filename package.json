@@ -1,0 +1,28 @@
+{
+  "name": "YelpCamp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "start": "node dist/index.js",
+    "dev": "nodemon dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ramchaik/YelpCamp.git"
+  },
+  "keywords": [],
+  "author": "Vaibhav Singh <0vaibhavsingh0@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ramchaik/YelpCamp/issues"
+  },
+  "homepage": "https://github.com/Ramchaik/YelpCamp#readme",
+  "devDependencies": {
+    "@types/node": "^14.14.22",
+    "nodemon": "^2.0.7",
+    "typescript": "^4.1.3"
+  }
+}
