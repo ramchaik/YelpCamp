@@ -1,4 +1,4 @@
-import express, { Express } from "express";
+import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import path from "path";
 
@@ -11,7 +11,7 @@ app.set("views", path.join(__dirname, "views"));
 
 const PORT = process.env.SERVER_PORT || 3000;
 
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response) => {
   res.render("home");
 });
 
