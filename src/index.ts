@@ -1,10 +1,10 @@
-import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
-import path from "path";
-import mongoose from "mongoose";
-import { Campgroud } from "./models/campgroud";
+import ejsMate from "ejs-mate";
+import express, { Express, Request, Response } from "express";
 import methodOverride from "method-override";
-import { runSeed } from "./seed";
+import mongoose from "mongoose";
+import path from "path";
+import { Campgroud } from "./models/campgroud";
 
 dotenv.config();
 
@@ -24,6 +24,7 @@ db.once("open", () => {
 
 const app: Express = express();
 
+app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
