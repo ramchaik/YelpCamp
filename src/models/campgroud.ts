@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 interface CampgroundAttrs {
   title: string;
+  image: string;
   price: string;
   description: string;
   location: string;
@@ -9,6 +10,7 @@ interface CampgroundAttrs {
 
 interface CampgroundDoc extends mongoose.Document {
   title: string;
+  image: string;
   price: string;
   description: string;
   location: string;
@@ -20,12 +22,13 @@ interface CampgroundModel extends mongoose.Model<CampgroundDoc> {
 
 const campgroudSchema = new mongoose.Schema<CampgroundDoc, CampgroundModel>({
   title: String,
+  image: String,
   price: String,
   description: String,
   location: String,
 });
 
-campgroudSchema.statics.build = (attrs: CampgroundAttrs) => {
+campgroudSchema.statics.build = (attrs: CampgroundAttrs): CampgroundDoc => {
   return new Campgroud(attrs);
 };
 
