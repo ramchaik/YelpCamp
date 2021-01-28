@@ -1,7 +1,12 @@
+import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
-import { ExpressError } from "./ExpressError";
+import { ExpressError } from "../utils/ExpressError";
 
-export const validateCampground = (body: any) => {
+export const validateCampground = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const campgroundSchema = Joi.object({
     campground: Joi.object({
       title: Joi.string().required(),
@@ -12,9 +17,11 @@ export const validateCampground = (body: any) => {
     }).required(),
   });
 
-  const { error } = campgroundSchema.validate(body);
+  const { error } = campgroundSchema.validate(req.body);
 
   if (error) {
     throw new ExpressError(error.details.map((e) => e.message).join(", "), 400);
   }
+
+  next();
 };

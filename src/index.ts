@@ -5,12 +5,10 @@ import methodOverride from "method-override";
 import mongoose from "mongoose";
 import path from "path";
 import { errorHandler } from "./middlewares/errorHandler";
+import { validateCampground } from "./middlewares/validateCampground";
 import { Campgroud } from "./models/campgroud";
-import { runSeed } from "./seed";
 import { catchAsync } from "./utils/catchAsync";
 import { ExpressError } from "./utils/ExpressError";
-import Joi from "joi";
-import { validateCampground } from "./utils/validations";
 
 // runSeed();
 dotenv.config();
@@ -79,9 +77,8 @@ app.get(
 
 app.post(
   "/campgrounds",
+  validateCampground,
   catchAsync(async (req: Request, res: Response) => {
-    validateCampground(req.body);
-
     const campground = Campgroud.build({
       ...req.body.campground,
       price: parseInt(req.body.campground.price, 10),
