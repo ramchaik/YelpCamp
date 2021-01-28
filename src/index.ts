@@ -91,6 +91,7 @@ app.post(
 
 app.put(
   "/campgrounds/:id",
+  validateCampground,
   catchAsync(async (req: Request, res: Response) => {
     const campground = await Campgroud.findByIdAndUpdate(req.params.id, {
       ...req.body.campground,
