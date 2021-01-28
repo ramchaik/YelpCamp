@@ -1,11 +1,13 @@
 import { NextFunction, Request, Response } from "express";
+import { ExpressError } from "../utils/ExpressError";
 
 export const errorHandler = (
-  err: any,
+  err: ExpressError,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const { status = 500, message = "Something went wrong" } = err;
-  res.status(status).send(message);
+  const { statusCode = 500 } = err;
+  if (!err.message) err.message = "Something went wrong";
+  res.status(statusCode).render("error", { err });
 };
