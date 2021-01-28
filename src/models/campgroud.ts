@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 interface CampgroundAttrs {
   title: string;
   image: string;
-  price: string;
+  price: number;
   description: string;
   location: string;
 }
@@ -11,7 +11,7 @@ interface CampgroundAttrs {
 interface CampgroundDoc extends mongoose.Document {
   title: string;
   image: string;
-  price: string;
+  price: number;
   description: string;
   location: string;
 }
@@ -23,7 +23,7 @@ interface CampgroundModel extends mongoose.Model<CampgroundDoc> {
 const campgroudSchema = new mongoose.Schema<CampgroundDoc, CampgroundModel>({
   title: String,
   image: String,
-  price: String,
+  price: Number,
   description: String,
   location: String,
 });

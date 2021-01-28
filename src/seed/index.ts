@@ -30,7 +30,7 @@ const seedDB = async () => {
       location: `${cities[getRandomIndex(1000)].city}, ${
         cities[getRandomIndex(1000)].state
       }`,
-      price: "10",
+      price: 10,
       image: "https://source.unsplash.com/collection/483251",
       description: "Seed data",
     });
