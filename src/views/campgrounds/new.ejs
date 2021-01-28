@@ -5,7 +5,8 @@
     <form
       action="/campgrounds"
       method="POST"
-      class="validated-form"
+      novalidate
+      class="needs-validation"
       enctype="multipart/form"
     >
       <div class="mb-3">
@@ -87,3 +88,27 @@
     <a href="/campgrounds">All Campgrounds</a>
   </div>
 </div>
+<script>
+  (function () {
+    "use strict";
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll(".needs-validation");
+
+    // Loop over them and prevent submission
+    Array.from(forms).forEach(function (form) {
+      form.addEventListener(
+        "submit",
+        function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+
+          form.classList.add("was-validated");
+        },
+        false
+      );
+    });
+  })();
+</script>
