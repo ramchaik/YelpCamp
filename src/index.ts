@@ -9,6 +9,8 @@ import { Campgroud } from "./models/campgroud";
 import { runSeed } from "./seed";
 import { catchAsync } from "./utils/catchAsync";
 import { ExpressError } from "./utils/ExpressError";
+import Joi from "joi";
+import { validateCampground } from "./utils/validations";
 
 // runSeed();
 dotenv.config();
@@ -78,15 +80,14 @@ app.get(
 app.post(
   "/campgrounds",
   catchAsync(async (req: Request, res: Response) => {
-    if (!req.body.campground) {
-      throw new ExpressError("Invalid Campground data", 400);
-    }
+    validateCampground(req.body);
 
     const campground = Campgroud.build({
       ...req.body.campground,
       price: parseInt(req.body.campground.price, 10),
     });
     await campground.save();
+
     res.redirect(`/campgrounds/${campground._id}`);
   })
 );
