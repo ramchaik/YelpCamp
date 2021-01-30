@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ReviewDoc } from "./review";
+import { Review, ReviewDoc } from "./review";
 const Schema = mongoose.Schema;
 
 interface CampgroundAttrs {
@@ -40,6 +40,16 @@ const campgroundSchema = new Schema<CampgroundDoc, CampgroundModel>({
 campgroundSchema.statics.build = (attrs: CampgroundAttrs): CampgroundDoc => {
   return new Campground(attrs);
 };
+
+campgroundSchema.post("findOneAndDelete", async function (doc) {
+  if (doc) {
+    await Review.deleteMany({
+      _id: {
+        $in: doc.reviews,
+      },
+    });
+  }
+});
 
 const Campground = mongoose.model<CampgroundDoc, CampgroundModel>(
   "Campground",
