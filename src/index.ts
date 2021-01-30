@@ -72,7 +72,9 @@ app.get(
 app.get(
   "/campgrounds/:id",
   catchAsync(async (req: Request, res: Response) => {
-    const campground = await Campground.findById(req.params.id);
+    const campground = await Campground.findById(req.params.id).populate(
+      "reviews"
+    );
     res.render("campgrounds/show", { campground });
   })
 );

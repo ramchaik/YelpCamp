@@ -26,6 +26,10 @@ const reviewSchema = new Schema<ReviewDoc, ReviewModel>({
   rating: Number,
 });
 
+reviewSchema.statics.build = (attrs: ReviewAttrs): ReviewDoc => {
+  return new Review(attrs);
+};
+
 const Review = mongoose.model<ReviewDoc, ReviewModel>("Review", reviewSchema);
 
 export { Review };
