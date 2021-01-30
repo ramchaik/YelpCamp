@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+const Schema = mongoose.Schema;
 
 interface CampgroundAttrs {
   title: string;
@@ -20,7 +21,7 @@ interface CampgroundModel extends mongoose.Model<CampgroundDoc> {
   build(attrs: CampgroundAttrs): CampgroundDoc;
 }
 
-const campgroudSchema = new mongoose.Schema<CampgroundDoc, CampgroundModel>({
+const campgroundSchema = new Schema<CampgroundDoc, CampgroundModel>({
   title: String,
   image: String,
   price: Number,
@@ -28,13 +29,13 @@ const campgroudSchema = new mongoose.Schema<CampgroundDoc, CampgroundModel>({
   location: String,
 });
 
-campgroudSchema.statics.build = (attrs: CampgroundAttrs): CampgroundDoc => {
-  return new Campgroud(attrs);
+campgroundSchema.statics.build = (attrs: CampgroundAttrs): CampgroundDoc => {
+  return new Campground(attrs);
 };
 
-const Campgroud = mongoose.model<CampgroundDoc, CampgroundModel>(
-  "Campgroud",
-  campgroudSchema
+const Campground = mongoose.model<CampgroundDoc, CampgroundModel>(
+  "Campground",
+  campgroundSchema
 );
 
-export { Campgroud };
+export { Campground };

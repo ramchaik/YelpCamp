@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Campgroud } from "../models/campgroud";
+import { Campground } from "../models/campground";
 import { cities } from "./cities";
 import { descriptors, places } from "./seedHelpers";
 
@@ -22,10 +22,10 @@ const getRandomIndex = (range: number): number =>
 const sample = (arr: any): any => arr[getRandomIndex(arr.length)];
 
 const seedDB = async () => {
-  await Campgroud.deleteMany({});
+  await Campground.deleteMany({});
 
   for (let i = 0; i < 50; ++i) {
-    const camp = Campgroud.build({
+    const camp = Campground.build({
       title: `${sample(descriptors)} ${sample(places)}`,
       location: `${cities[getRandomIndex(1000)].city}, ${
         cities[getRandomIndex(1000)].state

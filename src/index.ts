@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 import path from "path";
 import { errorHandler } from "./middlewares/errorHandler";
 import { validateCampground } from "./middlewares/validateCampground";
-import { Campgroud } from "./models/campgroud";
+import { Campground } from "./models/campground";
 import { catchAsync } from "./utils/catchAsync";
 import { ExpressError } from "./utils/ExpressError";
 
@@ -47,7 +47,7 @@ app.get(
 app.get(
   "/campgrounds",
   catchAsync(async (req: Request, res: Response) => {
-    const campgrounds = await Campgroud.find();
+    const campgrounds = await Campground.find();
     res.render("campgrounds/index", { campgrounds });
   })
 );
@@ -62,7 +62,7 @@ app.get(
 app.get(
   "/campgrounds/:id/edit",
   catchAsync(async (req: Request, res: Response) => {
-    const campground = await Campgroud.findById(req.params.id);
+    const campground = await Campground.findById(req.params.id);
     res.render("campgrounds/edit", { campground });
   })
 );
@@ -70,7 +70,7 @@ app.get(
 app.get(
   "/campgrounds/:id",
   catchAsync(async (req: Request, res: Response) => {
-    const campground = await Campgroud.findById(req.params.id);
+    const campground = await Campground.findById(req.params.id);
     res.render("campgrounds/show", { campground });
   })
 );
@@ -79,7 +79,7 @@ app.post(
   "/campgrounds",
   validateCampground,
   catchAsync(async (req: Request, res: Response) => {
-    const campground = Campgroud.build({
+    const campground = Campground.build({
       ...req.body.campground,
       price: parseInt(req.body.campground.price, 10),
     });
@@ -93,7 +93,7 @@ app.put(
   "/campgrounds/:id",
   validateCampground,
   catchAsync(async (req: Request, res: Response) => {
-    const campground = await Campgroud.findByIdAndUpdate(req.params.id, {
+    const campground = await Campground.findByIdAndUpdate(req.params.id, {
       ...req.body.campground,
     });
     res.redirect(`/campgrounds/${campground._id}`);
@@ -104,7 +104,7 @@ app.delete(
   "/campgrounds/:id",
   catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
-    await Campgroud.findByIdAndDelete(id);
+    await Campground.findByIdAndDelete(id);
     res.redirect("/campgrounds");
   })
 );
