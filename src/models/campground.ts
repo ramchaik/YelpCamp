@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { ReviewDoc } from "./review";
 const Schema = mongoose.Schema;
 
 interface CampgroundAttrs {
@@ -15,6 +16,7 @@ interface CampgroundDoc extends mongoose.Document {
   price: number;
   description: string;
   location: string;
+  reviews: ReviewDoc[];
 }
 
 interface CampgroundModel extends mongoose.Model<CampgroundDoc> {
@@ -27,6 +29,12 @@ const campgroundSchema = new Schema<CampgroundDoc, CampgroundModel>({
   price: Number,
   description: String,
   location: String,
+  reviews: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Review",
+    },
+  ],
 });
 
 campgroundSchema.statics.build = (attrs: CampgroundAttrs): CampgroundDoc => {
