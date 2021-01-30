@@ -8,7 +8,6 @@ import { errorHandler } from "./middlewares/errorHandler";
 import { validateCampground, validateReview } from "./middlewares/validate";
 import { Campground } from "./models/campground";
 import { Review } from "./models/review";
-import { runSeed } from "./seed";
 import { catchAsync } from "./utils/catchAsync";
 import { ExpressError } from "./utils/ExpressError";
 
@@ -123,6 +122,17 @@ app.post(
     await review.save();
     await campground.save();
     res.redirect(`/campgrounds/${campground._id}`);
+  })
+);
+
+app.delete(
+  "/campgrounds/:id/reviews/:reviewId",
+  catchAsync(async (req: Request, res: Response) => {
+    const { id, reviewId } = req.params;
+    // @ts-ignore
+    await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/campgrounds/${id}`);
   })
 );
 
