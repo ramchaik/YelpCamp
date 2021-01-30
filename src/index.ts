@@ -5,8 +5,10 @@ import methodOverride from "method-override";
 import mongoose from "mongoose";
 import path from "path";
 import { errorHandler } from "./middlewares/errorHandler";
-import { validateCampground } from "./middlewares/validateCampground";
+import { validateCampground, validateReview } from "./middlewares/validate";
 import { Campground } from "./models/campground";
+import { Review } from "./models/review";
+import { runSeed } from "./seed";
 import { catchAsync } from "./utils/catchAsync";
 import { ExpressError } from "./utils/ExpressError";
 
@@ -106,6 +108,19 @@ app.delete(
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);
     res.redirect("/campgrounds");
+  })
+);
+
+app.post(
+  "/campgrounds/:id/reviews",
+  validateReview,
+  catchAsync(async (req: Request, res: Response) => {
+    const campground = await Campground.findById(req.params.id);
+    const review = Review.build(req.body.review);
+    campground.reviews.push(review);
+    await review.save();
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
   })
 );
 
