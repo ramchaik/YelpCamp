@@ -2,19 +2,13 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 interface ReviewAttrs {
-  title: string;
-  image: string;
-  price: number;
-  description: string;
-  location: string;
+  body: string;
+  rating: number;
 }
 
 export interface ReviewDoc extends mongoose.Document {
-  title: string;
-  image: string;
-  price: number;
-  description: string;
-  location: string;
+  body: string;
+  rating: number;
 }
 
 interface ReviewModel extends mongoose.Model<ReviewDoc> {
