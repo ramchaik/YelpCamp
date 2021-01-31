@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import ejsMate from "ejs-mate";
 import express, { Express, NextFunction, Request, Response } from "express";
+import session from "express-session";
 import methodOverride from "method-override";
 import mongoose from "mongoose";
 import path from "path";
@@ -9,6 +10,7 @@ import { campgroundRouter } from "./routes/campgrounds";
 import { reviewRouter } from "./routes/reviews";
 import { catchAsync } from "./utils/catchAsync";
 import { ExpressError } from "./utils/ExpressError";
+import { getSessionConfig } from "./utils/sessionConfig";
 
 // runSeed();
 dotenv.config();
@@ -35,6 +37,9 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "../public")));
+
+const sessionConfig = getSessionConfig();
+app.use(session(sessionConfig));
 
 const PORT = process.env.SERVER_PORT || 3000;
 

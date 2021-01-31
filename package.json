@@ -27,6 +27,7 @@
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.11",
+    "@types/express-session": "^1.17.3",
     "@types/fs-extra": "^9.0.6",
     "@types/method-override": "^0.0.31",
     "@types/node": "^14.14.22",
@@ -45,6 +46,7 @@
     "ejs": "^3.1.5",
     "ejs-mate": "^3.0.0",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "joi": "^17.3.0",
     "method-override": "^3.0.0",
     "mongoose": "^5.11.13"
