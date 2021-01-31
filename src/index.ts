@@ -1,13 +1,12 @@
 import dotenv from "dotenv";
 import ejsMate from "ejs-mate";
-import express, { Express, Request, Response } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import methodOverride from "method-override";
 import mongoose from "mongoose";
 import path from "path";
 import { errorHandler } from "./middlewares/errorHandler";
-import { validateCampground, validateReview } from "./middlewares/validate";
-import { Campground } from "./models/campground";
-import { Review } from "./models/review";
+import { campgroundRouter } from "./routes/campgrounds";
+import { reviewRouter } from "./routes/reviews";
 import { catchAsync } from "./utils/catchAsync";
 import { ExpressError } from "./utils/ExpressError";
 
@@ -38,6 +37,9 @@ app.use(methodOverride("_method"));
 
 const PORT = process.env.SERVER_PORT || 3000;
 
+app.use("/campgrounds", campgroundRouter);
+app.use("/campgrounds/:id/reviews", reviewRouter);
+
 app.get(
   "/",
   catchAsync(async (req: Request, res: Response) => {
@@ -45,98 +47,7 @@ app.get(
   })
 );
 
-app.get(
-  "/campgrounds",
-  catchAsync(async (req: Request, res: Response) => {
-    const campgrounds = await Campground.find();
-    res.render("campgrounds/index", { campgrounds });
-  })
-);
-
-app.get(
-  "/campgrounds/new",
-  catchAsync(async (req: Request, res: Response) => {
-    res.render("campgrounds/new");
-  })
-);
-
-app.get(
-  "/campgrounds/:id/edit",
-  catchAsync(async (req: Request, res: Response) => {
-    const campground = await Campground.findById(req.params.id);
-    res.render("campgrounds/edit", { campground });
-  })
-);
-
-app.get(
-  "/campgrounds/:id",
-  catchAsync(async (req: Request, res: Response) => {
-    const campground = await Campground.findById(req.params.id).populate(
-      "reviews"
-    );
-    res.render("campgrounds/show", { campground });
-  })
-);
-
-app.post(
-  "/campgrounds",
-  validateCampground,
-  catchAsync(async (req: Request, res: Response) => {
-    const campground = Campground.build({
-      ...req.body.campground,
-      price: parseInt(req.body.campground.price, 10),
-    });
-    await campground.save();
-
-    res.redirect(`/campgrounds/${campground._id}`);
-  })
-);
-
-app.put(
-  "/campgrounds/:id",
-  validateCampground,
-  catchAsync(async (req: Request, res: Response) => {
-    const campground = await Campground.findByIdAndUpdate(req.params.id, {
-      ...req.body.campground,
-    });
-    res.redirect(`/campgrounds/${campground._id}`);
-  })
-);
-
-app.delete(
-  "/campgrounds/:id",
-  catchAsync(async (req: Request, res: Response) => {
-    const { id } = req.params;
-    await Campground.findByIdAndDelete(id);
-    res.redirect("/campgrounds");
-  })
-);
-
-app.post(
-  "/campgrounds/:id/reviews",
-  validateReview,
-  catchAsync(async (req: Request, res: Response) => {
-    const campground = await Campground.findById(req.params.id);
-    const review = Review.build(req.body.review);
-    campground.reviews.push(review);
-    await review.save();
-    await campground.save();
-    res.redirect(`/campgrounds/${campground._id}`);
-  })
-);
-
-app.delete(
-  "/campgrounds/:id/reviews/:reviewId",
-  catchAsync(async (req: Request, res: Response) => {
-    const { id, reviewId } = req.params;
-    // @ts-ignore
-    await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-    await Review.findByIdAndDelete(reviewId);
-    res.redirect(`/campgrounds/${id}`);
-  })
-);
-
-app.all("*", (req, res, next) => {
+app.all("*", (req: Request, res: Response, next: NextFunction) => {
   next(new ExpressError("Page Not Found ", 404));
 });
 
