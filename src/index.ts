@@ -34,6 +34,7 @@ app.set("views", path.join(__dirname, "views"));
 // to parse the body
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.use(express.static(path.join(__dirname, "../public")));
 
 const PORT = process.env.SERVER_PORT || 3000;
 
