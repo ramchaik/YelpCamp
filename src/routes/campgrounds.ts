@@ -1,4 +1,5 @@
 import { Request, Response, Router } from "express";
+import { isLoggedIn } from "../middlewares/isLoggedIn";
 import { validateCampground } from "../middlewares/validate";
 import { Campground } from "../models/campground";
 import { catchAsync } from "../utils/catchAsync";
@@ -50,6 +51,7 @@ router.get(
 
 router.post(
   "",
+  isLoggedIn,
   validateCampground,
   catchAsync(async (req: Request, res: Response) => {
     const campground = Campground.build({
@@ -65,6 +67,7 @@ router.post(
 
 router.put(
   "/:id",
+  isLoggedIn,
   validateCampground,
   catchAsync(async (req: Request, res: Response) => {
     const campground = await Campground.findByIdAndUpdate(req.params.id, {
@@ -77,6 +80,7 @@ router.put(
 
 router.delete(
   "/:id",
+  isLoggedIn,
   catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);
