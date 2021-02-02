@@ -14,6 +14,7 @@ import { setupResLocals } from "./middlewares/setupResLocals";
 import { User } from "./models/user";
 import { campgroundRouter } from "./routes/campgrounds";
 import { reviewRouter } from "./routes/reviews";
+import { userRouter } from "./routes/users";
 import { catchAsync } from "./utils/catchAsync";
 import { getSessionConfig } from "./utils/sessionConfig";
 
@@ -48,6 +49,7 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use(setupResLocals);
 
+app.use("/", userRouter);
 app.use("/campgrounds", campgroundRouter);
 app.use("/campgrounds/:id/reviews", reviewRouter);
 

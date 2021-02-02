@@ -1,0 +1,43 @@
+import { Request, Response, Router } from "express";
+import { catchAsync } from "../utils/catchAsync";
+import { User } from "../models/user";
+import passport from "passport";
+
+const router = Router({ mergeParams: true });
+
+router.get("/register", async (req: Request, res: Response) => {
+  res.render("users/register");
+});
+
+router.post(
+  "/register",
+  catchAsync(async (req: Request, res: Response) => {
+    try {
+      const { email, username, password } = req.body;
+      const user = await User.build({ email, username, password });
+      req.flash("success", "Welcome to Yelp Camp!");
+      res.redirect("/campgrounds");
+    } catch (error) {
+      req.flash("error", error.message);
+      res.redirect("/register");
+    }
+  })
+);
+
+router.get("/login", (req: Request, res: Response) => {
+  res.render("users/login");
+});
+
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    failureFlash: true,
+    failureRedirect: "/login",
+  }),
+  catchAsync(async (req: Request, res: Response) => {
+    req.flash("success", "Welcome back!");
+    res.redirect("/campgrounds");
+  })
+);
+
+export { router as userRouter };
