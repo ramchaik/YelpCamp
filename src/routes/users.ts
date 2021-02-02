@@ -2,6 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import { catchAsync } from "../utils/catchAsync";
 import { User } from "../models/user";
 import passport from "passport";
+import { ExpressReqWithSession } from "../types";
 
 const router = Router({ mergeParams: true });
 
@@ -38,9 +39,11 @@ router.post(
     failureFlash: true,
     failureRedirect: "/login",
   }),
-  catchAsync(async (req: Request, res: Response) => {
+  catchAsync(async (req: ExpressReqWithSession, res: Response) => {
     req.flash("success", "Welcome back!");
-    res.redirect("/campgrounds");
+    const redirectUrl = req.session.returnTo || "/campgrounds";
+    delete req.session.returnTo;
+    res.redirect(redirectUrl);
   })
 );
 

@@ -18,7 +18,6 @@ import { userRouter } from "./routes/users";
 import { catchAsync } from "./utils/catchAsync";
 import { getSessionConfig } from "./utils/sessionConfig";
 
-// runSeed();
 dotenv.config();
 
 connectToDatabase();

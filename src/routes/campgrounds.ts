@@ -16,6 +16,7 @@ router.get(
 
 router.get(
   "/new",
+  isLoggedIn,
   catchAsync(async (_: Request, res: Response) => {
     res.render("campgrounds/new");
   })
@@ -23,6 +24,7 @@ router.get(
 
 router.get(
   "/:id/edit",
+  isLoggedIn,
   catchAsync(async (req: Request, res: Response) => {
     const campground = await Campground.findById(req.params.id);
     if (!campground) {
