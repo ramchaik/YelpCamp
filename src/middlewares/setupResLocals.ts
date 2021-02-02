@@ -5,6 +5,7 @@ export const setupResLocals = (
   res: Response,
   next: NextFunction
 ) => {
+  res.locals.currentUser = req.user;
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   next();
