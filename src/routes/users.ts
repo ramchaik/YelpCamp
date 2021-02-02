@@ -40,4 +40,10 @@ router.post(
   })
 );
 
+router.get("/logout", (req: Request, res: Response) => {
+  req.logout();
+  req.flash("success", "Goodbye!");
+  res.redirect("/campgrounds");
+});
+
 export { router as userRouter };
