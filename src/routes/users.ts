@@ -1,4 +1,4 @@
-import { Request, Response, Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import { catchAsync } from "../utils/catchAsync";
 import { User } from "../models/user";
 import passport from "passport";
@@ -11,12 +11,16 @@ router.get("/register", async (req: Request, res: Response) => {
 
 router.post(
   "/register",
-  catchAsync(async (req: Request, res: Response) => {
+  catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { email, username, password } = req.body;
-      const user = await User.build({ email, username, password });
-      req.flash("success", "Welcome to Yelp Camp!");
-      res.redirect("/campgrounds");
+      const registeredUser = await User.build({ email, username, password });
+
+      req.login(registeredUser, (err) => {
+        if (err) next(err);
+        req.flash("success", "Welcome to Yelp Camp!");
+        res.redirect("/campgrounds");
+      });
     } catch (error) {
       req.flash("error", error.message);
       res.redirect("/register");
