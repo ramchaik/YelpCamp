@@ -4,11 +4,14 @@ import ejsMate from "ejs-mate";
 import express, { Express, Request, Response } from "express";
 import session from "express-session";
 import methodOverride from "method-override";
+import passport from "passport";
+import LocalStrategy from "passport-local";
 import path from "path";
 import { connectToDatabase } from "./db/utils";
 import { errorHandler } from "./middlewares/errorHandler";
 import { handleNotFound } from "./middlewares/handleNotFound";
 import { setupResLocals } from "./middlewares/setupResLocals";
+import { User } from "./models/user";
 import { campgroundRouter } from "./routes/campgrounds";
 import { reviewRouter } from "./routes/reviews";
 import { catchAsync } from "./utils/catchAsync";
@@ -33,8 +36,15 @@ app.use(express.static(path.join(__dirname, "../public")));
 
 const sessionConfig = getSessionConfig();
 app.use(session(sessionConfig));
-
 app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// @ts-ignore
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use(setupResLocals);
 
