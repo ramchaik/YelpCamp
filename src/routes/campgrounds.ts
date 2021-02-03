@@ -4,6 +4,7 @@ import { isLoggedIn } from "../middlewares/isLoggedIn";
 import { validateCampground } from "../middlewares/validate";
 import { Campground } from "../models/campground";
 import { catchAsync } from "../utils/catchAsync";
+import { isAuthor } from "../middlewares/isAuthor";
 
 const router = Router();
 
@@ -26,6 +27,7 @@ router.get(
 router.get(
   "/:id/edit",
   isLoggedIn,
+  isAuthor,
   catchAsync(async (req: Request, res: Response) => {
     const campground = await Campground.findById(req.params.id);
     if (!campground) {
@@ -73,6 +75,7 @@ router.post(
 router.put(
   "/:id",
   isLoggedIn,
+  isAuthor,
   validateCampground,
   catchAsync(async (req: Request, res: Response) => {
     const campground = await Campground.findByIdAndUpdate(req.params.id, {
@@ -86,6 +89,7 @@ router.put(
 router.delete(
   "/:id",
   isLoggedIn,
+  isAuthor,
   catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);
