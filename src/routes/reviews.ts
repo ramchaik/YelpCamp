@@ -1,4 +1,6 @@
 import { Request, Response, Router } from "express";
+import { ExpressReqWithSession } from "../types";
+import { isLoggedIn } from "../middlewares/isLoggedIn";
 import { validateReview } from "../middlewares/validate";
 import { Campground } from "../models/campground";
 import { Review } from "../models/review";
@@ -8,10 +10,11 @@ const router = Router({ mergeParams: true });
 
 router.post(
   "/",
+  isLoggedIn,
   validateReview,
-  catchAsync(async (req: Request, res: Response) => {
+  catchAsync(async (req: ExpressReqWithSession, res: Response) => {
     const campground = await Campground.findById(req.params.id);
-    const review = Review.build(req.body.review);
+    const review = Review.build({ ...req.body.review, author: req.user._id });
     campground.reviews.push(review);
     await review.save();
     await campground.save();
