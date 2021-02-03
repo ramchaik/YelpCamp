@@ -1,4 +1,5 @@
 import { Request, Response, Router } from "express";
+import { ExpressReqWithSession } from "../types";
 import { isLoggedIn } from "../middlewares/isLoggedIn";
 import { validateCampground } from "../middlewares/validate";
 import { Campground } from "../models/campground";
@@ -39,9 +40,10 @@ router.get(
 router.get(
   "/:id",
   catchAsync(async (req: Request, res: Response) => {
-    const campground = await Campground.findById(req.params.id).populate(
-      "reviews"
-    );
+    const campground = await Campground.findById(req.params.id)
+      .populate("reviews")
+      .populate("author");
+
     if (!campground) {
       req.flash("error", "Cannot find that campground!");
       return res.redirect("/campgrounds");
@@ -52,12 +54,13 @@ router.get(
 );
 
 router.post(
-  "",
+  "/",
   isLoggedIn,
   validateCampground,
-  catchAsync(async (req: Request, res: Response) => {
+  catchAsync(async (req: ExpressReqWithSession, res: Response) => {
     const campground = Campground.build({
       ...req.body.campground,
+      author: req.user._id,
       price: parseInt(req.body.campground.price, 10),
     });
     await campground.save();

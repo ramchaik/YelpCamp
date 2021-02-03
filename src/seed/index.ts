@@ -26,6 +26,7 @@ const seedDB = async () => {
 
   for (let i = 0; i < 50; ++i) {
     const camp = Campground.build({
+      author: "601982825d8031834b64284f",
       title: `${sample(descriptors)} ${sample(places)}`,
       location: `${cities[getRandomIndex(1000)].city}, ${
         cities[getRandomIndex(1000)].state
@@ -39,8 +40,7 @@ const seedDB = async () => {
   }
 };
 
-export const runSeed = () =>
-  seedDB().then(async () => {
-    // await mongoose.connection.close();
-    console.log("Seeding completed!");
-  });
+seedDB().then(async () => {
+  await mongoose.connection.close();
+  console.log("Seeding completed!");
+});

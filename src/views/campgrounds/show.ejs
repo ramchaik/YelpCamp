@@ -17,7 +17,9 @@
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item text-muted"><%= campground.location%></li>
-        </li> -->
+        <li class="list-group-item">
+          Submitted By <%= campground.author.username%>
+        </li>
         <li class="list-group-item">$<%= campground.price%>/night</li>
       </ul>
       <div class="card-body">
@@ -40,12 +42,24 @@
   <div class="col-6">
     <div id="map">
       <h2>Leave a Review</h2>
-        <form action="/campgrounds/<%=campground._id%>/reviews" method="POST" class="mb-3 validated-form" novalidate>
-            <div class="mb-3">
-                <label class="form-label" for="rating">Rating</label>
-                <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
-            </div>
-            <!-- <fieldset class="starability-basic">
+      <form
+        action="/campgrounds/<%=campground._id%>/reviews"
+        method="POST"
+        class="mb-3 validated-form"
+        novalidate
+      >
+        <div class="mb-3">
+          <label class="form-label" for="rating">Rating</label>
+          <input
+            class="form-range"
+            type="range"
+            min="1"
+            max="5"
+            name="review[rating]"
+            id="rating"
+          />
+        </div>
+        <!-- <fieldset class="starability-basic">
                 <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked
                     aria-label="No rating." />
                 <input type="radio" id="first-rate1" name="review[rating]" value="1" />
@@ -59,29 +73,36 @@
                 <input type="radio" id="first-rate5" name="review[rating]" value="5" />
                 <label for="first-rate5" title="Amazing">5 stars</label>
             </fieldset> -->
-            <div class="mb-3">
-                <label class="form-label" for="body">Review Text</label>
-                <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3" required></textarea>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-            </div>
-            <button class="btn btn-success">Submit</button>
-
-</form>
-<% for(let review of campground.reviews) { %>
-  <div class="card mb-3 ">
-      <div class="card-body">
+        <div class="mb-3">
+          <label class="form-label" for="body">Review Text</label>
+          <textarea
+            class="form-control"
+            name="review[body]"
+            id="body"
+            cols="30"
+            rows="3"
+            required
+          ></textarea>
+          <div class="valid-feedback">Looks good!</div>
+        </div>
+        <button class="btn btn-success">Submit</button>
+      </form>
+      <% for(let review of campground.reviews) { %>
+      <div class="card mb-3">
+        <div class="card-body">
           <p class="starability-result" data-rating="<%=review.rating%>">
-              Rated: <%= review.rating %> stars
+            Rated: <%= review.rating %> stars
           </p>
           <p class="card-text">Review: <%= review.body %></p>
-          <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
-              <button class="btn btn-sm btn-danger">Delete</button>
+          <form
+            action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE"
+            method="POST"
+          >
+            <button class="btn btn-sm btn-danger">Delete</button>
           </form>
+        </div>
       </div>
-  </div>
-  <% } %>
-   </div>
+      <% } %>
+    </div>
   </div>
 </div>
