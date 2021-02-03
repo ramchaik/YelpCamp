@@ -1,9 +1,10 @@
 import { Request, Response, Router } from "express";
-import { ExpressReqWithSession } from "../types";
 import { isLoggedIn } from "../middlewares/isLoggedIn";
+import { isReviewAuthor } from "../middlewares/isReviewAuthor";
 import { validateReview } from "../middlewares/validate";
 import { Campground } from "../models/campground";
 import { Review } from "../models/review";
+import { ExpressReqWithSession } from "../types";
 import { catchAsync } from "../utils/catchAsync";
 
 const router = Router({ mergeParams: true });
@@ -25,6 +26,8 @@ router.post(
 
 router.delete(
   "/:reviewId",
+  isLoggedIn,
+  isReviewAuthor,
   catchAsync(async (req: Request, res: Response) => {
     const { id, reviewId } = req.params;
     // @ts-ignore
