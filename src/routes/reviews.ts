@@ -8,6 +8,7 @@ import { catchAsync } from "../utils/catchAsync";
 const router = Router({ mergeParams: true });
 
 router.post("/", isLoggedIn, validateReview, catchAsync(reviews.createReview));
+
 router.delete(
   "/:reviewId",
   isLoggedIn,
