@@ -25,6 +25,7 @@ interface CampgroundAttrs {
   images: IImages[];
   price: number;
   description: string;
+  location: string;
   geometry: IGeoJSON;
   author: string;
 }
@@ -35,6 +36,7 @@ interface CampgroundDoc extends mongoose.Document {
   price: number;
   description: string;
   geometry: IGeoJSON;
+  location: string;
   reviews: ReviewDoc[];
   author: UserDoc;
 }
@@ -57,6 +59,7 @@ const campgroundSchema = new Schema<CampgroundDoc, CampgroundModel>({
   images: [ImageSchema],
   price: Number,
   description: String,
+  location: String,
   geometry: {
     type: {
       type: String,
