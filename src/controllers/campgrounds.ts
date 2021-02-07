@@ -1,7 +1,8 @@
-import { Campground } from "../models/campground";
 import { Request, Response } from "express";
-import { ExpressReqWithSession } from "../types";
 import { cloudinary } from "../cloudinary";
+import { USER_IMG_UPLOAD_LIMIT } from "../constants";
+import { Campground } from "../models/campground";
+import { ExpressReqWithSession } from "../types";
 
 const index = async (_: Request, res: Response) => {
   const campgrounds = await Campground.find();
@@ -17,10 +18,12 @@ const createCampground = async (req: ExpressReqWithSession, res: Response) => {
     ...req.body.campground,
     author: req.user._id,
     price: parseInt(req.body.campground.price, 10),
-    images: files.map((f: Express.Multer.File) => ({
-      url: f.path,
-      filename: f.filename,
-    })),
+    images: files
+      .map((f: Express.Multer.File) => ({
+        url: f.path,
+        filename: f.filename,
+      }))
+      .slice(0, USER_IMG_UPLOAD_LIMIT),
   });
   await campground.save();
 
@@ -62,10 +65,12 @@ const updateCampground = async (req: Request, res: Response) => {
     ...req.body.campground,
   });
 
-  const imgs = files.map((f: Express.Multer.File) => ({
-    url: f.path,
-    filename: f.filename,
-  }));
+  const imgs = files
+    .map((f: Express.Multer.File) => ({
+      url: f.path,
+      filename: f.filename,
+    }))
+    .slice(0, USER_IMG_UPLOAD_LIMIT - campground.images.length);
   campground.images.push(...imgs);
 
   await campground.save();
