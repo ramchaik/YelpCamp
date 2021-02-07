@@ -3,6 +3,10 @@ import { cloudinary } from "../cloudinary";
 import { USER_IMG_UPLOAD_LIMIT } from "../constants";
 import { Campground } from "../models/campground";
 import { ExpressReqWithSession } from "../types";
+import mbxGeocoding from "@mapbox/mapbox-sdk/services/geocoding";
+
+const mapBoxToken = process.env.MAPBOX_TOKEN;
+const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 
 const index = async (_: Request, res: Response) => {
   const campgrounds = await Campground.find();
@@ -14,6 +18,14 @@ const renderNewForm = async (_: Request, res: Response) => {
 };
 const createCampground = async (req: ExpressReqWithSession, res: Response) => {
   const files = req.files as Express.Multer.File[];
+  const geoData = await geocoder
+    .forwardGeocode({
+      query: req.body.campground.location,
+      mode: "mapbox.places",
+      limit: 1,
+    })
+    .send();
+
   const campground = Campground.build({
     ...req.body.campground,
     author: req.user._id,
