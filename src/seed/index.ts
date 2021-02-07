@@ -32,7 +32,13 @@ const seedDB = async () => {
         cities[getRandomIndex(1000)].state
       }`,
       price: 10,
-      image: "https://source.unsplash.com/collection/483251",
+      images: [
+        {
+          url:
+            "https://res.cloudinary.com/dzldayxpa/image/upload/v1612684190/YelpCamp/qac6wzww3pieiihp5xds.jpg",
+          filename: "YelpCamp/qac6wzww3pieiihp5xds",
+        },
+      ],
       description: "Seed data",
     });
 
