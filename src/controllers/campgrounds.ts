@@ -1,6 +1,7 @@
 import { Campground } from "../models/campground";
 import { Request, Response } from "express";
 import { ExpressReqWithSession } from "../types";
+import { cloudinary } from "../cloudinary";
 
 const index = async (_: Request, res: Response) => {
   const campgrounds = await Campground.find();
@@ -68,6 +69,22 @@ const updateCampground = async (req: Request, res: Response) => {
   campground.images.push(...imgs);
 
   await campground.save();
+
+  if (req.body.deleteImages) {
+    for (const filename of req.body.deleteImages) {
+      await cloudinary.uploader.destroy(filename);
+    }
+
+    await Campground.updateOne({
+      $pull: {
+        images: {
+          filename: {
+            $in: req.body.deleteImages,
+          },
+        },
+      },
+    });
+  }
 
   req.flash("success", "Successfully updated the campground!");
   res.redirect(`/campgrounds/${campground._id}`);

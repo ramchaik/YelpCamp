@@ -8,6 +8,7 @@ export const campgroundSchema = Joi.object({
     description: Joi.string().required(),
     location: Joi.string().required(),
   }).required(),
+  deleteImages: Joi.array(),
 });
 
 export const reviewSchema = Joi.object({
