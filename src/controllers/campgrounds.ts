@@ -56,9 +56,19 @@ const renderEditForm = async (req: Request, res: Response) => {
 };
 
 const updateCampground = async (req: Request, res: Response) => {
+  const files = req.files as Express.Multer.File[];
   const campground = await Campground.findByIdAndUpdate(req.params.id, {
     ...req.body.campground,
   });
+
+  const imgs = files.map((f: Express.Multer.File) => ({
+    url: f.path,
+    filename: f.filename,
+  }));
+  campground.images.push(...imgs);
+
+  await campground.save();
+
   req.flash("success", "Successfully updated the campground!");
   res.redirect(`/campgrounds/${campground._id}`);
 };
