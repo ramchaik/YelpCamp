@@ -11,10 +11,15 @@ const renderNewForm = async (_: Request, res: Response) => {
   res.render("campgrounds/new");
 };
 const createCampground = async (req: ExpressReqWithSession, res: Response) => {
+  const files = req.files as Express.Multer.File[];
   const campground = Campground.build({
     ...req.body.campground,
     author: req.user._id,
     price: parseInt(req.body.campground.price, 10),
+    images: files.map((f: Express.Multer.File) => ({
+      url: f.path,
+      filename: f.filename,
+    })),
   });
   await campground.save();
 

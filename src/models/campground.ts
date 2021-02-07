@@ -3,9 +3,14 @@ import { Review, ReviewDoc } from "./review";
 import { UserDoc } from "./user";
 const Schema = mongoose.Schema;
 
+interface IImages {
+  url: string;
+  filename: string;
+}
+
 interface CampgroundAttrs {
   title: string;
-  image: string;
+  images: IImages[];
   price: number;
   description: string;
   location: string;
@@ -14,7 +19,7 @@ interface CampgroundAttrs {
 
 interface CampgroundDoc extends mongoose.Document {
   title: string;
-  image: string;
+  images: IImages[];
   price: number;
   description: string;
   location: string;
@@ -28,7 +33,12 @@ interface CampgroundModel extends mongoose.Model<CampgroundDoc> {
 
 const campgroundSchema = new Schema<CampgroundDoc, CampgroundModel>({
   title: String,
-  image: String,
+  images: [
+    {
+      url: String,
+      filename: String,
+    },
+  ],
   price: Number,
   description: String,
   location: String,
