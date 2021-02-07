@@ -8,6 +8,13 @@ interface IImages {
   filename: string;
 }
 
+interface ImageDoc extends mongoose.Document {
+  url: string;
+  filename: string;
+}
+
+interface ImageModel extends mongoose.Model<ImageDoc> {}
+
 interface CampgroundAttrs {
   title: string;
   images: IImages[];
@@ -31,14 +38,18 @@ interface CampgroundModel extends mongoose.Model<CampgroundDoc> {
   build(attrs: CampgroundAttrs): CampgroundDoc;
 }
 
+const ImageSchema = new Schema<ImageDoc, ImageModel>({
+  url: String,
+  filename: String,
+});
+
+ImageSchema.virtual("thumbnail").get(function () {
+  return this.url.replace("/upload", "/upload/w_200");
+});
+
 const campgroundSchema = new Schema<CampgroundDoc, CampgroundModel>({
   title: String,
-  images: [
-    {
-      url: String,
-      filename: String,
-    },
-  ],
+  images: [ImageSchema],
   price: Number,
   description: String,
   location: String,
