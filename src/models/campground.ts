@@ -15,12 +15,17 @@ interface ImageDoc extends mongoose.Document {
 
 interface ImageModel extends mongoose.Model<ImageDoc> {}
 
+interface IGeoJSON {
+  type: "Point";
+  coordinates: number[];
+}
+
 interface CampgroundAttrs {
   title: string;
   images: IImages[];
   price: number;
   description: string;
-  location: string;
+  geometry: IGeoJSON;
   author: string;
 }
 
@@ -29,7 +34,7 @@ interface CampgroundDoc extends mongoose.Document {
   images: IImages[];
   price: number;
   description: string;
-  location: string;
+  geometry: IGeoJSON;
   reviews: ReviewDoc[];
   author: UserDoc;
 }
@@ -52,7 +57,17 @@ const campgroundSchema = new Schema<CampgroundDoc, CampgroundModel>({
   images: [ImageSchema],
   price: Number,
   description: String,
-  location: String,
+  geometry: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      required: true,
+    },
+    coordinates: {
+      type: [Number],
+      required: true,
+    },
+  },
   author: {
     type: Schema.Types.ObjectId,
     ref: "User",

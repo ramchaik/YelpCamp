@@ -18,6 +18,7 @@ const renderNewForm = async (_: Request, res: Response) => {
 };
 const createCampground = async (req: ExpressReqWithSession, res: Response) => {
   const files = req.files as Express.Multer.File[];
+
   const geoData = await geocoder
     .forwardGeocode({
       query: req.body.campground.location,
@@ -25,6 +26,7 @@ const createCampground = async (req: ExpressReqWithSession, res: Response) => {
       limit: 1,
     })
     .send();
+  const [location] = geoData.body.features;
 
   const campground = Campground.build({
     ...req.body.campground,
@@ -36,6 +38,7 @@ const createCampground = async (req: ExpressReqWithSession, res: Response) => {
         filename: f.filename,
       }))
       .slice(0, USER_IMG_UPLOAD_LIMIT),
+    geometry: location.geometry,
   });
   await campground.save();
 
