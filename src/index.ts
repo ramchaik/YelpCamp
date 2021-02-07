@@ -1,5 +1,9 @@
+import { __PROD__ } from "./constants";
+if (!__PROD__) {
+  require("dotenv-safe").config();
+}
+
 import flash from "connect-flash";
-import dotenv from "dotenv";
 import ejsMate from "ejs-mate";
 import express, { Express, Request, Response } from "express";
 import session from "express-session";
@@ -17,8 +21,6 @@ import { reviewRouter } from "./routes/reviews";
 import { userRouter } from "./routes/users";
 import { catchAsync } from "./utils/catchAsync";
 import { getSessionConfig } from "./utils/sessionConfig";
-
-dotenv.config();
 
 connectToDatabase();
 
