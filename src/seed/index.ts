@@ -31,6 +31,10 @@ const seedDB = async () => {
       location: `${cities[getRandomIndex(1000)].city}, ${
         cities[getRandomIndex(1000)].state
       }`,
+      geometry: {
+        coordinates: [77.17222, 31.10333],
+        type: "Point",
+      },
       price: 10,
       images: [
         {
@@ -41,7 +45,6 @@ const seedDB = async () => {
       ],
       description: "Seed data",
     });
-
     await camp.save();
   }
 };
