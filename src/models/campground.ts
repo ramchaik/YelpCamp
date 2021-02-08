@@ -45,18 +45,18 @@ interface CampgroundModel extends mongoose.Model<CampgroundDoc> {
   build(attrs: CampgroundAttrs): CampgroundDoc;
 }
 
-const ImageSchema = new Schema<ImageDoc, ImageModel>({
+const imageSchema = new Schema<ImageDoc, ImageModel>({
   url: String,
   filename: String,
 });
 
-ImageSchema.virtual("thumbnail").get(function () {
+imageSchema.virtual("thumbnail").get(function () {
   return this.url.replace("/upload", "/upload/w_200");
 });
 
 const campgroundSchema = new Schema<CampgroundDoc, CampgroundModel>({
   title: String,
-  images: [ImageSchema],
+  images: [imageSchema],
   price: Number,
   description: String,
   location: String,
