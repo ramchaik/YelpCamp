@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { SchemaOptions } from "mongoose";
 import { Review, ReviewDoc } from "./review";
 import { UserDoc } from "./user";
 const Schema = mongoose.Schema;
@@ -54,33 +54,50 @@ imageSchema.virtual("thumbnail").get(function () {
   return this.url.replace("/upload", "/upload/w_200");
 });
 
-const campgroundSchema = new Schema<CampgroundDoc, CampgroundModel>({
-  title: String,
-  images: [imageSchema],
-  price: Number,
-  description: String,
-  location: String,
-  geometry: {
-    type: {
-      type: String,
-      enum: ["Point"],
-      required: true,
-    },
-    coordinates: {
-      type: [Number],
-      required: true,
-    },
+const opts: SchemaOptions = {
+  toJSON: {
+    virtuals: true,
   },
-  author: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-  },
-  reviews: [
-    {
+};
+
+const campgroundSchema = new Schema<CampgroundDoc, CampgroundModel>(
+  {
+    title: String,
+    images: [imageSchema],
+    price: Number,
+    description: String,
+    location: String,
+    geometry: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        required: true,
+      },
+      coordinates: {
+        type: [Number],
+        required: true,
+      },
+    },
+    author: {
       type: Schema.Types.ObjectId,
-      ref: "Review",
+      ref: "User",
     },
-  ],
+    reviews: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
+  },
+  opts
+);
+
+campgroundSchema.virtual("properties.popUpMarkup").get(function () {
+  return `
+  <strong>
+    <a href="/campgrounds/${this._id}">${this.title}</a>
+  </strong>
+  <p>${this.description.slice(0, 20)}...</p>`;
 });
 
 campgroundSchema.statics.build = (attrs: CampgroundAttrs): CampgroundDoc => {
