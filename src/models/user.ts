@@ -1,4 +1,4 @@
-import mongoose, { AuthenticationResult, PassportLocalModel } from "mongoose";
+import mongoose from "mongoose";
 import passportLocalMongoose from "passport-local-mongoose";
 const Schema = mongoose.Schema;
 
@@ -15,7 +15,7 @@ export interface UserDoc extends mongoose.Document {
 }
 
 interface AuthenticateMethod<T> {
-  (username: string, password: string): Promise<AuthenticationResult>;
+  (username: string, password: string): Promise<any>;
   (
     username: string,
     password: string,
@@ -26,10 +26,7 @@ interface AuthenticateMethod<T> {
 interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): Promise<UserDoc>;
   authenticate(): AuthenticateMethod<any>;
-  serializeUser(): (
-    user: PassportLocalModel<any>,
-    cb: (err: any, id?: any) => void
-  ) => void;
+  serializeUser(): (user: any, cb: (err: any, id?: any) => void) => void;
   deserializeUser(): (
     username: string,
     cb: (err: any, user?: any) => void
