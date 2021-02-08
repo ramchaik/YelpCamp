@@ -2,10 +2,10 @@ import { __PROD__ } from "./constants";
 if (!__PROD__) {
   require("dotenv-safe").config();
 }
-
 import flash from "connect-flash";
 import ejsMate from "ejs-mate";
 import express, { Express, Request, Response } from "express";
+import mongoSanitize from "express-mongo-sanitize";
 import session from "express-session";
 import methodOverride from "method-override";
 import passport from "passport";
@@ -35,6 +35,7 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "../public")));
+app.use(mongoSanitize());
 
 const sessionConfig = getSessionConfig();
 app.use(session(sessionConfig));
