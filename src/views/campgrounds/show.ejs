@@ -64,7 +64,8 @@
     </div>
   </div>
   <div class="col-6">
-    <div id="map" style="width: 400px; height: 300px"></div>
+    <div id="map"></div>
+
     <% if(currentUser){ %>
     <h2>Leave a Review</h2>
     <form
@@ -74,16 +75,9 @@
       novalidate
     >
       <!-- <div class="mb-3">
-          <label class="form-label" for="rating">Rating</label>
-          <input
-            class="form-range"
-            type="range"
-            min="1"
-            max="5"
-            name="review[rating]"
-            id="rating"
-          />
-        </div> -->
+                <label class="form-label" for="rating">Rating</label>
+                <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
+            </div> -->
       <fieldset class="starability-basic">
         <input
           type="radio"
@@ -141,8 +135,9 @@
     <% } %>
   </div>
 </div>
+
 <script>
-  const mapToken = "<%-process.env.MAPBOX_TOKEN%>";
+  const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
   const campground = <%- JSON.stringify(campground) %>
 </script>
 
