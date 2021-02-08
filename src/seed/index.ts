@@ -25,15 +25,14 @@ const seedDB = async () => {
   await Campground.deleteMany({});
 
   for (let i = 0; i < 50; ++i) {
+    const idx = getRandomIndex(1000);
     const camp = Campground.build({
       author: "601982825d8031834b64284f",
       title: `${sample(descriptors)} ${sample(places)}`,
-      location: `${cities[getRandomIndex(1000)].city}, ${
-        cities[getRandomIndex(1000)].state
-      }`,
+      location: `${cities[idx].city}, ${cities[idx].state}`,
       geometry: {
-        coordinates: [77.17222, 31.10333],
         type: "Point",
+        coordinates: [cities[idx].longitude, cities[idx].latitude],
       },
       price: 10,
       images: [
