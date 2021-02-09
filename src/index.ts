@@ -21,6 +21,7 @@ import { reviewRouter } from "./routes/reviews";
 import { userRouter } from "./routes/users";
 import { catchAsync } from "./utils/catchAsync";
 import { getSessionConfig } from "./utils/sessionConfig";
+import helmet from "helmet";
 
 connectToDatabase();
 
@@ -36,6 +37,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(mongoSanitize());
+app.use(helmet({ contentSecurityPolicy: false }));
 
 const sessionConfig = getSessionConfig();
 app.use(session(sessionConfig));
