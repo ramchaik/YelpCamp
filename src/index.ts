@@ -1,7 +1,15 @@
-import { __PROD__ } from "./constants";
+import {
+  connectSrcUrls,
+  fontSrcUrls,
+  scriptSrcUrls,
+  styleSrcUrls,
+  __PROD__,
+} from "./constants";
+
 if (!__PROD__) {
   require("dotenv-safe").config();
 }
+
 import flash from "connect-flash";
 import ejsMate from "ejs-mate";
 import express, { Express, Request, Response } from "express";
@@ -37,7 +45,29 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(mongoSanitize());
-app.use(helmet({ contentSecurityPolicy: false }));
+app.use(helmet());
+
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: [],
+      connectSrc: ["'self'", ...connectSrcUrls],
+      scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+      workerSrc: ["'self'", "blob:"],
+      childSrc: ["blob:"],
+      objectSrc: [],
+      imgSrc: [
+        "'self'",
+        "blob:",
+        "data:",
+        `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/`,
+        "https://images.unsplash.com",
+      ],
+      fontSrc: ["'self'", ...fontSrcUrls],
+    },
+  })
+);
 
 const sessionConfig = getSessionConfig();
 app.use(session(sessionConfig));
