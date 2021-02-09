@@ -21,7 +21,7 @@ const connectToDatabase = () => {
     console.log("Database connected");
   });
 
-  return db;
+  return { db, dbURI };
 };
 
 export { connectToDatabase, db };

@@ -31,7 +31,7 @@ import { catchAsync } from "./utils/catchAsync";
 import { getSessionConfig } from "./utils/sessionConfig";
 import helmet from "helmet";
 
-connectToDatabase();
+const { dbURI } = connectToDatabase();
 
 const app: Express = express();
 const PORT = process.env.SERVER_PORT || 3000;
@@ -69,7 +69,7 @@ app.use(
   })
 );
 
-const sessionConfig = getSessionConfig();
+const sessionConfig = getSessionConfig(dbURI);
 app.use(session(sessionConfig));
 app.use(flash());
 
