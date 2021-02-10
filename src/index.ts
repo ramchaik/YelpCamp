@@ -34,7 +34,7 @@ import helmet from "helmet";
 const { dbURI } = connectToDatabase();
 
 const app: Express = express();
-const PORT = process.env.SERVER_PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
