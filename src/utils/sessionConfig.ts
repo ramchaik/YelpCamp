@@ -29,7 +29,7 @@ export const getSessionConfig = (uri: string): SessionOptions => {
     saveUninitialized: true,
     cookie: {
       httpOnly: true,
-      secure: __PROD__,
+      // secure: __PROD__,
       expires: new Date(Date.now() + WEEK_IN_MS),
       maxAge: WEEK_IN_MS,
     },
