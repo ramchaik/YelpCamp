@@ -1,11 +1,8 @@
 import mongoose from "mongoose";
-import { __PROD__ } from "../constants";
 let db = null;
 
 const connectToDatabase = () => {
-  const dbURI = __PROD__
-    ? process.env.DB_URI
-    : "mongodb://localhost:27017/yelp-camp";
+  const dbURI = process.env.DB_URI || "mongodb://localhost:27017/yelp-camp";
 
   mongoose.connect(dbURI, {
     useNewUrlParser: true,

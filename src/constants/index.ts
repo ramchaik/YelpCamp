@@ -26,3 +26,5 @@ export const connectSrcUrls = [
 ];
 
 export const fontSrcUrls: any[] = [];
+
+export const SESSION_SECRET = "thisisnotagoodsecret!";

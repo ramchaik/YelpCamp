@@ -1,13 +1,14 @@
 import session, { SessionOptions, Store } from "express-session";
-import { __PROD__ } from "../constants";
+import { __PROD__, SESSION_SECRET } from "../constants";
 import connectMongo from "connect-mongo";
 
 const MongoDBStore = connectMongo(session);
+const secret = process.env.SECRET || SESSION_SECRET;
 
 const createStore = (url: string): Store => {
   const store = new MongoDBStore({
     url,
-    secret: "thisisnotagoodsecret!",
+    secret,
     touchAfter: 24 * 60 * 60,
   });
 
@@ -23,7 +24,7 @@ export const getSessionConfig = (uri: string): SessionOptions => {
   const sessionConfig: SessionOptions = {
     store: createStore(uri),
     name: "session",
-    secret: "thisisnotagoodsecret!",
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
